@@ -1,29 +1,15 @@
-from flask import Flask, send_from_directory, jsonify
-from flask_socketio import SocketIO
-import threading
-import asyncio
-import bot
+from flask import Flask, send_from_directory
+import bot  # This will start the bot on boot
 
-app = Flask(__name__, static_folder='static')
-socketio = SocketIO(app, cors_allowed_origins="*")
+app = Flask(__name__, static_folder="static")
 
-def send_update(username, available):
-    socketio.emit('update', {'username': username, 'available': available})
-
-def run_bot():
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(bot.hunter_loop(update_callback=send_update))
-
-threading.Thread(target=run_bot, daemon=True).start()
-
-@app.route('/')
+@app.route("/")
 def index():
-    return send_from_directory('static', 'index.html')
+    return send_from_directory("static", "index.html")
 
-@app.route('/checked')
-def checked():
-    return jsonify(list(bot.checked_usernames))
+@app.route("/<path:path>")
+def serve_static(path):
+    return send_from_directory("static", path)
 
-if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
