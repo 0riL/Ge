@@ -25,28 +25,30 @@ def log_error(error_message):
     with open('error_log.txt', 'a') as f:
         f.write(f'{time.ctime()}: {error_message}\n')
 
+def generate_random_username():
+    import random, string
+    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=4))
+
 def run_bot():
     checked = set()
     if os.path.exists(LOG_FILE):
         with open(LOG_FILE, 'r') as f:
             checked = set(line.strip() for line in f)
 
+    print("[BOT] Starting username hunter...")
+
     while True:
-        username = generate_random_username()
-        if username in checked:
-            continue
-        if check_username_availability(username):
-            print(f'[AVAILABLE] {username}')
-            log_username(username)
-        else:
-            print(f'[TAKEN] {username}')
-        checked.add(username)
-        time.sleep(1 / BOT_SPEED)
-
-def generate_random_username():
-    import random, string
-    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=4))
-
-# Optional auto-run
-if os.getenv("RUN_BOT", "true").lower() == "true":
-    run_bot()
+        try:
+            username = generate_random_username()
+            if username in checked:
+                continue
+            if check_username_availability(username):
+                print(f'[AVAILABLE] {username}')
+                log_username(username)
+            else:
+                print(f'[TAKEN] {username}')
+            checked.add(username)
+            time.sleep(1 / BOT_SPEED)
+        except Exception as e:
+            log_error(f'CRITICAL ERROR: {e}')
+            time.sleep(5)
