@@ -1,0 +1,5 @@
+flask
+flask-socketio
+aiohttp
+requests
+eventlet
