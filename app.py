@@ -1,17 +1,12 @@
-import os
 from flask import Flask, send_from_directory
-from threading import Thread
-from bot import run_bot  # ✅ Make sure your `bot.py` defines run_bot()
+import os
+import bot  # This will start your bot in background if RUN_BOT env var is set to true
 
 app = Flask(__name__, static_folder='static')
 
 @app.route('/')
 def index():
     return send_from_directory('static', 'index.html')
-
-# ✅ Start bot in a background thread only if enabled
-if os.getenv("RUN_BOT", "true").lower() == "true":
-    Thread(target=run_bot).start()
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 10000))
