@@ -1,20 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Roblox Username Hunter</title>
   <style>
-    body { background-color: black; color: gold; font-family: monospace; text-align: center; }
-    h1 { animation: pulse 2s infinite; }
-    @keyframes pulse {
-      0% { text-shadow: 0 0 5px gold; }
-      50% { text-shadow: 0 0 20px gold; }
-      100% { text-shadow: 0 0 5px gold; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: gold;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px gold; }
+      to { text-shadow: 0 0 20px gold, 0 0 30px orange; }
+    }
+
+    .status {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: white;
+      animation: flicker 2s infinite;
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .stats {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: gold;
+    }
+
+    .glitch {
+      font-size: 1.5rem;
+      color: #fff;
+      position: relative;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      background: black;
+    }
+
+    .glitch::before {
+      animation: glitchTop 2s infinite linear alternate-reverse;
+      color: red;
+      top: -2px;
+    }
+
+    .glitch::after {
+      animation: glitchBottom 3s infinite linear alternate-reverse;
+      color: blue;
+      top: 2px;
+    }
+
+    @keyframes glitchTop {
+      0% { clip-path: inset(0 0 80% 0); }
+      100% { clip-path: inset(0 0 10% 0); }
+    }
+
+    @keyframes glitchBottom {
+      0% { clip-path: inset(90% 0 0 0); }
+      100% { clip-path: inset(10% 0 0 0); }
     }
   </style>
 </head>
 <body>
-  <h1>💫 Roblox Username Hunter 💫</h1>
-  <p>Checking usernames in real-time...</p>
+  <h1 class="glitch" data-text="💫 Roblox Username Hunter 💫">💫 Roblox Username Hunter 💫</h1>
+  <p class="status">⚙️ Bot is scanning usernames in real-time...</p>
+  <div class="stats">
+    <p>Checked: <span id="checked">...</span></p>
+    <p>Available: <span id="available">...</span></p>
+    <p>Last update: <span id="timestamp">--</span></p>
+  </div>
 </body>
 </html>
